@@ -25,11 +25,69 @@ local MainWindow = Rayfield:CreateWindow({
     }
 })
 
--- Wait for the key system to be completed successfully before creating tabs
+-- Create tabs and buttons only after correct key entered
 MainWindow:OnKeySystemSuccess(function()
     print("Correct key entered, creating tabs")
 
     local HomeTab = MainWindow:CreateTab("Home", "")
     local ModsTab = MainWindow:CreateTab("Mods", "")
 
-    
+    -- Home tab buttons
+    HomeTab:CreateButton({
+        Name = "Discord Link",
+        Callback = function()
+            setclipboard("https://discord.gg/YourInviteHere")
+            Rayfield:Notify({
+                Title = "Copied!",
+                Content = "Discord invite copied to clipboard.",
+                Duration = 3
+            })
+        end
+    })
+
+    HomeTab:CreateButton({
+        Name = "YouTube Link",
+        Callback = function()
+            setclipboard("https://youtube.com/YourChannelHere")
+            Rayfield:Notify({
+                Title = "Copied!",
+                Content = "YouTube channel link copied to clipboard.",
+                Duration = 3
+            })
+        end
+    })
+
+    -- Mods tab buttons
+    ModsTab:CreateButton({
+        Name = "Infinite Money",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end
+    })
+
+    ModsTab:CreateButton({
+        Name = "Load Spawner",
+        Callback = function()
+            local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+            if Spawner then
+                Spawner.Load()
+                Rayfield:Notify({
+                    Title = "Spawner",
+                    Content = "Spawner module loaded.",
+                    Duration = 3
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Failed to load Spawner module.",
+                    Duration = 3
+                })
+            end
+        end
+    })
+
+    MainWindow:SelectTab(HomeTab)
+    MainWindow:Toggle(true)
+
+    print("Tabs are now visible")
+end)
