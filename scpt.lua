@@ -4,79 +4,93 @@ if not Rayfield then
     return
 end
 
+-- Generate random math problem
+local num1 = math.random(1, 100)
+local num2 = math.random(1, 100)
+local correctKey = tostring(num1 + num2)
+local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+
+print("Key system problem:", keyNote, "Answer:", correctKey)
+
 local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
-    LoadingTitle = "NunHub Loaded",
-    LoadingSubtitle = "Welcome back!",
+    LoadingTitle = "NunHub Loading",
+    LoadingSubtitle = "by Ysunza",
     Theme = "Default",
-    ToggleUIKeybind = "K"
+    ToggleUIKeybind = "K",
+    KeySystem = true,
+    KeySettings = {
+        Title = "Math Key System",
+        Subtitle = "Answer the math problem to continue",
+        Note = keyNote,
+        FileName = "MathKeyFile",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {correctKey}
+    }
 })
 
-local HomeTab = MainWindow:CreateTab("Home", 4483362458)
-local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
+MainWindow:Toggle(true)  -- show UI (key prompt)
 
--- Home tab buttons
-HomeTab:CreateButton({
-    Name = "Discord Link",
-    Callback = function()
-        setclipboard("https://discord.gg/YourInviteHere")
-        Rayfield:Notify({
-            Title = "Copied!",
-            Content = "Discord invite copied to clipboard.",
-            Duration = 3
-        })
-    end
-})
+MainWindow:OnKeySystemSuccess(function()
+    print("Correct key entered, creating tabs")
 
-HomeTab:CreateButton({
-    Name = "YouTube Link",
-    Callback = function()
-        setclipboard("https://youtube.com/YourChannelHere")
-        Rayfield:Notify({
-            Title = "Copied!",
-            Content = "YouTube channel link copied to clipboard.",
-            Duration = 3
-        })
-    end
-})
+    local HomeTab = MainWindow:CreateTab("Home", 4483362458)
+    local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
 
--- Mods tab buttons
-ModsTab:CreateButton({
-    Name = "Infinite Money",
-    Callback = function()
-        Rayfield:Notify({
-            Title = "Notice",
-            Content = "Executing Infinite Money...",
-            Duration = 3
-        })
-        task.spawn(function()
-            wait(3)  -- Wait 3 seconds for notification before executing
-            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-        end)
-    end
-})
-
-ModsTab:CreateButton({
-    Name = "Load Spawner",
-    Callback = function()
-        local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
-        if Spawner then
-            Spawner.Load()
+    -- Home tab buttons
+    HomeTab:CreateButton({
+        Name = "Discord Link",
+        Callback = function()
+            setclipboard("https://discord.gg/YourInviteHere")
             Rayfield:Notify({
-                Title = "Spawner",
-                Content = "Spawner module loaded.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Failed to load Spawner module.",
+                Title = "Copied!",
+                Content = "Discord invite copied to clipboard.",
                 Duration = 3
             })
         end
-    end
-})
+    })
 
-MainWindow:Toggle(true) -- Show UI immediately
+    HomeTab:CreateButton({
+        Name = "YouTube Link",
+        Callback = function()
+            setclipboard("https://youtube.com/YourChannelHere")
+            Rayfield:Notify({
+                Title = "Copied!",
+                Content = "YouTube channel link copied to clipboard.",
+                Duration = 3
+            })
+        end
+    })
 
-print("UI is now visible")
+    -- Mods tab buttons
+    ModsTab:CreateButton({
+        Name = "Infinite Money",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end
+    })
+
+    ModsTab:CreateButton({
+        Name = "Load Spawner",
+        Callback = function()
+            local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+            if Spawner then
+                Spawner.Load()
+                Rayfield:Notify({
+                    Title = "Spawner",
+                    Content = "Spawner module loaded.",
+                    Duration = 3
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Failed to load Spawner module.",
+                    Duration = 3
+                })
+            end
+        end
+    })
+
+    MainWindow:Toggle(true)  -- keep window visible after key success
+end)
