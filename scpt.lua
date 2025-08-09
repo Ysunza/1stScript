@@ -8,8 +8,8 @@ local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
 
 print("Key system problem:", keyNote, "Answer:", correctKey)
 
--- Step 1: Key System window (blocks until correct key)
-local KeyWindow = Rayfield:CreateWindow({
+-- Create main window with KeySystem enabled
+local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loading",
     LoadingSubtitle = "by Ysunza",
@@ -28,19 +28,8 @@ local KeyWindow = Rayfield:CreateWindow({
     }
 })
 
-print("Correct key entered, destroying KeyWindow")
-
-
--- Step 2: Create main UI window with tabs and buttons
-local MainWindow = Rayfield:CreateWindow({
-    Name = "NunHub",
-    LoadingTitle = "NunHub Loaded",
-    LoadingSubtitle = "Welcome back!",
-    Theme = "Default",
-    ToggleUIKeybind = "K"
-})
-
-local HomeTab = MainWindow:CreateTab("Home", "") -- Use empty string if no icon ID
+-- Create tabs AFTER the key is verified
+local HomeTab = MainWindow:CreateTab("Home", "")
 local ModsTab = MainWindow:CreateTab("Mods", "")
 
 print("Tabs created")
