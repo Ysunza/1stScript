@@ -6,7 +6,7 @@ local num2 = math.random(1, 100)
 local correctKey = tostring(num1 + num2)
 local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
 
--- Step 1: Create Key System Window (blocks until correct key)
+-- Step 1: Key System window (blocks until correct key)
 local KeyWindow = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loading",
@@ -26,10 +26,10 @@ local KeyWindow = Rayfield:CreateWindow({
     }
 })
 
--- After correct key entered, the script continues here:
+-- After correct key entered, destroy the key window to proceed
 KeyWindow:Destroy()
 
--- Step 2: Show Main UI Window with tabs
+-- Step 2: Create main UI window with tabs
 local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loaded",
@@ -41,6 +41,7 @@ local MainWindow = Rayfield:CreateWindow({
 local HomeTab = MainWindow:CreateTab("Home", 4483362458)
 local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
 
+-- Home tab buttons
 HomeTab:CreateButton({
     Name = "Discord Link",
     Callback = function()
@@ -65,15 +66,20 @@ HomeTab:CreateButton({
     end
 })
 
+-- Mods tab buttons
 ModsTab:CreateButton({
     Name = "Infinite Money",
     Callback = function()
+        -- Show notification immediately on click
         Rayfield:Notify({
             Title = "Notice",
             Content = "Try Again",
             Duration = 3
         })
-        task.delay(3, function()
+
+        -- After 3 seconds delay, run the pastefy script
+        task.spawn(function()
+            wait(3)
             loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
         end)
     end
@@ -101,26 +107,4 @@ ModsTab:CreateButton({
 })
 
 MainWindow:SelectTab(HomeTab)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+MainWindow:Toggle(true)
