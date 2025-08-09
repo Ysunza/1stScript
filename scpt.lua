@@ -85,7 +85,7 @@ ModsTab:CreateButton({
         })
         task.delay(3, function()
             loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-        end
+        end)
     end
 })
 
