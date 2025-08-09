@@ -1,5 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
+-- Create the main window
 local Window = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loading",
@@ -8,34 +9,14 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
+-- Create Start tab with Start button and loading label
 local StartTab = Window:CreateTab("Start", 4483362458)
-local HomeTab = Window:CreateTab("Home", 4483362458)
-local ModsTab = Window:CreateTab("Mods", 4483362458)
-
--- Dummy labels for Home and Mods tabs (to initialize UI)
-local dummyHome = HomeTab:CreateLabel("Loading Home...")
-local dummyMods = ModsTab:CreateLabel("Loading Mods...")
-
--- Show Start tab initially
-Window:SelectTab(StartTab)
-
 local loadingLabel = StartTab:CreateLabel("")
 
-local homeButtons = {}
-local modsButtons = {}
-
-local function clearButtons(buttons)
-    for _, btn in pairs(buttons) do
-        if btn.Destroy then
-            btn:Destroy()
-        end
-    end
-    return {}
-end
+local HomeTab, ModsTab -- will create these after loading finishes
 
 local loading = false
 
--- Add Start button properly here
 StartTab:CreateButton({
     Name = "Start",
     Callback = function()
@@ -47,16 +28,15 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- Remove dummy labels
-        if dummyHome then dummyHome:Destroy() end
-        if dummyMods then dummyMods:Destroy() end
+        -- After loading, destroy Start tab to hide it
+        StartTab:Destroy()
 
-        -- Clear old buttons
-        homeButtons = clearButtons(homeButtons)
-        modsButtons = clearButtons(modsButtons)
+        -- Create Home and Mods tabs now
+        HomeTab = Window:CreateTab("Home", 4483362458)
+        ModsTab = Window:CreateTab("Mods", 4483362458)
 
         -- Add buttons to Home tab
-        table.insert(homeButtons, HomeTab:CreateButton({
+        HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
                 setclipboard("https://discord.gg/YourInviteHere")
@@ -66,9 +46,9 @@ StartTab:CreateButton({
                     Duration = 3
                 })
             end
-        }))
+        })
 
-        table.insert(homeButtons, HomeTab:CreateButton({
+        HomeTab:CreateButton({
             Name = "YouTube Link",
             Callback = function()
                 setclipboard("https://youtube.com/YourChannelHere")
@@ -78,17 +58,17 @@ StartTab:CreateButton({
                     Duration = 3
                 })
             end
-        }))
+        })
 
         -- Add buttons to Mods tab
-        table.insert(modsButtons, ModsTab:CreateButton({
+        ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
                 loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
             end
-        }))
+        })
 
-        table.insert(modsButtons, ModsTab:CreateButton({
+        ModsTab:CreateButton({
             Name = "Load Spawner",
             Callback = function()
                 local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
@@ -107,13 +87,13 @@ StartTab:CreateButton({
                     })
                 end
             end
-        }))
+        })
 
-        -- Force UI refresh by switching tabs
-        Window:SelectTab(ModsTab)
+        -- Switch to Home tab after loading
         Window:SelectTab(HomeTab)
     end
 })
+
 
 
 
