@@ -8,12 +8,14 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
--- Create all tabs at start
 local StartTab = Window:CreateTab("Start", 4483362458)
 local HomeTab = Window:CreateTab("Home", 4483362458)
 local ModsTab = Window:CreateTab("Mods", 4483362458)
 
--- Show StartTab first on launch
+-- Dummy content to force UI creation
+local dummyHome = HomeTab:CreateLabel("Loading Home...")
+local dummyMods = ModsTab:CreateLabel("Loading Mods...")
+
 Window:SelectTab(StartTab)
 
 local loadingLabel = StartTab:CreateLabel("")
@@ -21,17 +23,16 @@ local loadingLabel = StartTab:CreateLabel("")
 local homeButtons = {}
 local modsButtons = {}
 
-local loading = false
-
--- Utility function to clear buttons safely
-local function clearButtons(buttonList)
-    for _, btn in pairs(buttonList) do
+local function clearButtons(buttons)
+    for _, btn in pairs(buttons) do
         if btn.Destroy then
             btn:Destroy()
         end
     end
     return {}
 end
+
+local loading = false
 
 StartTab:CreateButton({
     Name = "Start",
@@ -44,11 +45,15 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- Clear old buttons in case of multiple runs
+        -- Clear dummy labels
+        dummyHome:Destroy()
+        dummyMods:Destroy()
+
+        -- Clear any old buttons
         homeButtons = clearButtons(homeButtons)
         modsButtons = clearButtons(modsButtons)
 
-        -- Create Home tab buttons
+        -- Add Home buttons
         table.insert(homeButtons, HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -73,7 +78,7 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Create Mods tab buttons
+        -- Add Mods buttons
         table.insert(modsButtons, ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -102,10 +107,12 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Switch to Home tab to show buttons after loading finishes
+        -- Force UI update by switching tabs twice
+        Window:SelectTab(ModsTab)
         Window:SelectTab(HomeTab)
     end
 })
+
 
 
 
