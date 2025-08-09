@@ -30,10 +30,10 @@ local KeyWindow = Rayfield:CreateWindow({
 })
 
 -- Destroy key window after correct key entered
-KeyWindow:Destroy()
+
 
 -- Delay a bit before creating welcome window
-task.delay(0.1, function()
+task.delay(1, function()
     local WelcomeWindow = Rayfield:CreateWindow({
         Name = "Welcome",
         LoadingTitle = "Welcome!",
