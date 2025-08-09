@@ -24,7 +24,7 @@ local KeyWindow = Rayfield:CreateWindow({
         Subtitle = "Answer the math problem to continue",
         Note = keyNote,
         FileName = "MathKeyFile",
-        SaveKey = true,
+        SaveKey = false,
         GrabKeyFromSite = false,
         Key = {correctKey}
     }
