@@ -12,10 +12,11 @@ local StartTab = Window:CreateTab("Start", 4483362458)
 local HomeTab = Window:CreateTab("Home", 4483362458)
 local ModsTab = Window:CreateTab("Mods", 4483362458)
 
--- Dummy content to force UI creation
+-- Dummy labels for Home and Mods tabs (to initialize UI)
 local dummyHome = HomeTab:CreateLabel("Loading Home...")
 local dummyMods = ModsTab:CreateLabel("Loading Mods...")
 
+-- Show Start tab initially
 Window:SelectTab(StartTab)
 
 local loadingLabel = StartTab:CreateLabel("")
@@ -34,6 +35,7 @@ end
 
 local loading = false
 
+-- Add Start button properly here
 StartTab:CreateButton({
     Name = "Start",
     Callback = function()
@@ -45,15 +47,15 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- Clear dummy labels
-        dummyHome:Destroy()
-        dummyMods:Destroy()
+        -- Remove dummy labels
+        if dummyHome then dummyHome:Destroy() end
+        if dummyMods then dummyMods:Destroy() end
 
-        -- Clear any old buttons
+        -- Clear old buttons
         homeButtons = clearButtons(homeButtons)
         modsButtons = clearButtons(modsButtons)
 
-        -- Add Home buttons
+        -- Add buttons to Home tab
         table.insert(homeButtons, HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -78,7 +80,7 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Add Mods buttons
+        -- Add buttons to Mods tab
         table.insert(modsButtons, ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -107,11 +109,12 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Force UI update by switching tabs twice
+        -- Force UI refresh by switching tabs
         Window:SelectTab(ModsTab)
         Window:SelectTab(HomeTab)
     end
 })
+
 
 
 
