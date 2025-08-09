@@ -4,6 +4,36 @@ if not Rayfield then
     return
 end
 
+
+-- Generate random addition problem
+local num1 = math.random(1, 100)
+local num2 = math.random(1, 100)
+local correctKey = tostring(num1 + num2)
+local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+
+print("Math key problem:", keyNote, "Answer:", correctKey)
+
+local MainWindow = Rayfield:CreateWindow({
+    Name = "NunHub",
+    LoadingTitle = "NunHub Loading",
+    LoadingSubtitle = "by You",
+    Theme = "Default",
+    ToggleUIKeybind = "K",
+    KeySystem = true,
+    KeySettings = {
+        Title = "Math Key System",
+        Subtitle = "Answer the math problem to continue",
+        Note = keyNote,
+        FileName = "MathKeyFile",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {correctKey}
+    }
+})
+
+MainWindow:Toggle(true)
+
+
 local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loaded",
