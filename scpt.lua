@@ -1,16 +1,21 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local function CreateMainWindow()
+    local MainWindow = Rayfield:CreateWindow({
+        Name = "Main Window",
+        LoadingTitle = "Main Loaded",
+        LoadingSubtitle = "Welcome!",
+        Theme = "Default",
+        ToggleUIKeybind = "K"
+    })
 
-local StartWindow = Rayfield:CreateWindow({
-    Name = "Test Launcher",
-    LoadingTitle = "Loading Launcher",
-    LoadingSubtitle = "Testing...",
-    Theme = "Default",
-    ToggleUIKeybind = nil
-})
+    local HomeTab = MainWindow:CreateTab("Home", 4483362458)
 
-local StartTab = StartWindow:CreateTab("Start", 4483362458)
-
-local loadingLabel = StartTab:CreateLabel("")
+    HomeTab:CreateButton({
+        Name = "Say Hello",
+        Callback = function()
+            print("Hello from main window!")
+        end
+    })
+end
 
 StartTab:CreateButton({
     Name = "Start",
@@ -19,9 +24,11 @@ StartTab:CreateButton({
             loadingLabel:Set("Loading... " .. i .. " / 5")
             wait(1)
         end
-        print("Loading done")
+        StartWindow:Toggle(false)
+        CreateMainWindow()
     end
 })
+
 
 
 
