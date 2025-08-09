@@ -8,29 +8,30 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
--- Create all tabs initially
+-- Create all tabs at start
 local StartTab = Window:CreateTab("Start", 4483362458)
 local HomeTab = Window:CreateTab("Home", 4483362458)
 local ModsTab = Window:CreateTab("Mods", 4483362458)
 
--- Hide Home and Mods tabs by default by selecting Start tab first
+-- Show StartTab first on launch
 Window:SelectTab(StartTab)
-
--- Store buttons so we can clear them if needed
-local homeButtons = {}
-local modsButtons = {}
-
--- Clear buttons function
-local function clearButtons(buttonList)
-    for _, btn in pairs(buttonList) do
-        btn:Destroy()
-    end
-    return {}
-end
 
 local loadingLabel = StartTab:CreateLabel("")
 
+local homeButtons = {}
+local modsButtons = {}
+
 local loading = false
+
+-- Utility function to clear buttons safely
+local function clearButtons(buttonList)
+    for _, btn in pairs(buttonList) do
+        if btn.Destroy then
+            btn:Destroy()
+        end
+    end
+    return {}
+end
 
 StartTab:CreateButton({
     Name = "Start",
@@ -43,11 +44,11 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- Clear any old buttons (if any)
+        -- Clear old buttons in case of multiple runs
         homeButtons = clearButtons(homeButtons)
         modsButtons = clearButtons(modsButtons)
 
-        -- Add buttons to Home tab
+        -- Create Home tab buttons
         table.insert(homeButtons, HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -72,7 +73,7 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Add buttons to Mods tab
+        -- Create Mods tab buttons
         table.insert(modsButtons, ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -101,10 +102,11 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Switch to Home tab after loading
+        -- Switch to Home tab to show buttons after loading finishes
         Window:SelectTab(HomeTab)
     end
 })
+
 
 
 
