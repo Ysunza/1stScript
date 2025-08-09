@@ -3,7 +3,7 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loading",
-    LoadingSubtitle = "by Ysunza",
+    LoadingSubtitle = "by Nun",
     Theme = "Default",
     ToggleUIKeybind = "K"
 })
