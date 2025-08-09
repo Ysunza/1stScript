@@ -1,52 +1,7 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Create the Start Window
-local StartWindow = Rayfield:CreateWindow({
-    Name = "Launcher",
-    LoadingTitle = "Loading Launcher",
-    LoadingSubtitle = "by Ysunza",
-    Theme = "Default",
-    ToggleUIKeybind = nil -- No keybind for start window
-})
-
-local StartTab = StartWindow:CreateTab("Start", 4483362458)
-
-local loadingLabel = nil
-local loadingCoroutine = nil
-
--- Start button
-StartTab:CreateButton({
-    Name = "Start",
-    Callback = function()
-        -- Disable the start button so it can't be clicked again during loading
-        StartTab:Disable()
-
-        -- Create or update loading label
-        if not loadingLabel then
-            loadingLabel = StartTab:CreateLabel("Loading... 0 / 10")
-        end
-
-        -- Loading animation coroutine
-        loadingCoroutine = coroutine.create(function()
-            for i = 1, 10 do
-                loadingLabel:Set("Loading... " .. i .. " / 10")
-                wait(1)
-            end
-            
-            -- After loading finishes
-            -- Close start window
-            StartWindow:Toggle(false)
-
-            -- Open new main window
-            CreateMainWindow()
-        end)
-
-        coroutine.resume(loadingCoroutine)
-    end
-})
-
 -- Function to create the main window after loading
-function CreateMainWindow()
+local function CreateMainWindow()
     local MainWindow = Rayfield:CreateWindow({
         Name = "NunHub",
         LoadingTitle = "NunHub Loaded",
@@ -113,6 +68,51 @@ function CreateMainWindow()
         end
     })
 end
+
+-- Create the Start Window
+local StartWindow = Rayfield:CreateWindow({
+    Name = "Launcher",
+    LoadingTitle = "Loading Launcher",
+    LoadingSubtitle = "by Ysunza",
+    Theme = "Default",
+    ToggleUIKeybind = nil -- No keybind for start window
+})
+
+local StartTab = StartWindow:CreateTab("Start", 4483362458)
+
+local loadingLabel = nil
+local loadingCoroutine = nil
+
+-- Start button
+StartTab:CreateButton({
+    Name = "Start",
+    Callback = function()
+        -- Disable the start button so it can't be clicked again during loading
+        StartTab:Disable()
+
+        -- Create or update loading label
+        if not loadingLabel then
+            loadingLabel = StartTab:CreateLabel("Loading... 0 / 10")
+        end
+
+        -- Loading animation coroutine
+        loadingCoroutine = coroutine.create(function()
+            for i = 1, 10 do
+                loadingLabel:Set("Loading... " .. i .. " / 10")
+                wait(1)
+            end
+            
+            -- After loading finishes
+            -- Close start window
+            StartWindow:Toggle(false)
+
+            -- Open new main window
+            CreateMainWindow()
+        end)
+
+        coroutine.resume(loadingCoroutine)
+    end
+})
 
 
 
