@@ -8,9 +8,42 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
+local HomeTab = Window:CreateTab("Home", 4483362458)
+local SettingsTab = Window:CreateTab("Settings", 4483362458)
+
+-- Declare Spawner variable outside so you can access it later if needed
 local Spawner
 
-local HomeTab = Window:CreateTab("Home", 4483362458)
+-- Loading screen elements (create a separate tab or section for loading animation)
+local LoadingTab = Window:CreateTab("Loading", 4483362458)
+
+-- Create a label to show loading progress
+local LoadingLabel = LoadingTab:CreateLabel("")
+
+-- Function to show loading animation for n seconds then run callback
+local function showLoadingAndRun(seconds, callback)
+    Window:SetVisible(true) -- make sure UI is visible
+    -- Show the loading tab
+    Window:SelectTab(LoadingTab)
+    
+    coroutine.wrap(function()
+        for i = 1, seconds do
+            LoadingLabel:Set("Loading... ".. tostring(i) .. " / " .. tostring(seconds) .. " seconds")
+            wait(1)
+        end
+        
+        LoadingLabel:Set("Loading complete!")
+        wait(0.5)
+        
+        -- Run the callback (your script)
+        callback()
+        
+        -- Return to Home tab after loading finishes
+        Window:SelectTab(HomeTab)
+    end)()
+end
+
+-- HOME TAB BUTTONS
 
 HomeTab:CreateButton({
     Name = "Join Discord",
@@ -24,7 +57,7 @@ HomeTab:CreateButton({
     end
 })
 
-HomeTab:CreateButton({  
+HomeTab:CreateButton({
     Name = "Infinite Money",
     Callback = function()
         loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
@@ -35,25 +68,13 @@ HomeTab:CreateButton({
     Name = "Load Spawner Module",
     Callback = function()
         Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+        
         if Spawner then
-            Spawner.Load() -- This shows the Spawner UI
-            
-            -- Wait a little for the UI to load
-            wait(1)
-            
-            -- Attempt to find and remove Spawner's UI to "go back" to NunHub UI
-            local player = game.Players.LocalPlayer
-            local playerGui = player:WaitForChild("PlayerGui")
-            
-            -- Assuming Spawner UI is a ScreenGui named "SpawnerUI" (replace with actual name if different)
-            local spawnerGui = playerGui:FindFirstChild("SpawnerUI")
-            if spawnerGui then
-                spawnerGui:Destroy()
-            end
-            
+            Spawner.Load()
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
             Rayfield:Notify({
                 Title = "Spawner",
-                Content = "Spawner loaded briefly, now returning to NunHub.",
+                Content = "Spawner module loaded and Infinite Money script executed.",
                 Duration = 3
             })
         else
@@ -66,7 +87,17 @@ HomeTab:CreateButton({
     end
 })
 
-local SettingsTab = Window:CreateTab("Settings", 4483362458)
+HomeTab:CreateButton({
+    Name = "Run External Script with Loading",
+    Callback = function()
+        -- Show loading animation for 10 seconds, then run your external script from your GitHub link
+        showLoadingAndRun(10, function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Ysunza/1stScript/main/scpt.lua"))()
+        end)
+    end
+})
+
+-- SETTINGS TAB
 
 SettingsTab:CreateDropdown({
     Name = "Select Theme",
@@ -76,5 +107,6 @@ SettingsTab:CreateDropdown({
         Window:SetTheme(selectedTheme)
     end
 })
+
 
 
