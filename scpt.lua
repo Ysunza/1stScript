@@ -1,8 +1,4 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-if not Rayfield then
-    warn("Failed to load Rayfield")
-    return
-end
 
 local num1 = math.random(1, 100)
 local num2 = math.random(1, 100)
