@@ -3,30 +3,17 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 local Window = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loading",
-    LoadingSubtitle = "by Nun",
+    LoadingSubtitle = "by Ysunza",
     Theme = "Default",
     ToggleUIKeybind = "K"
 })
 
--- Create Tabs
+-- Create StartTab now; do NOT create HomeTab or ModsTab yet
 local StartTab = Window:CreateTab("Start", 4483362458)
-local HomeTab = Window:CreateTab("Home", 4483362458)
-local ModsTab = Window:CreateTab("Mods", 4483362458)
 
--- Initially disable Home and Mods tabs (you can't disable tabs directly, so hide their contents)
 local homeButtons = {}
 local modsButtons = {}
 
--- Function to clear Home and Mods tabs (simulate hiding)
-local function clearTab(tabButtons)
-    for _, btn in pairs(tabButtons) do
-        btn:Destroy()
-    end
-    tabButtons = {}
-    return tabButtons
-end
-
--- Create loading label for StartTab
 local loadingLabel = StartTab:CreateLabel("")
 
 local loading = false
@@ -42,10 +29,11 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- After loading, clear start tab contents to simulate hiding
-        StartTab:Destroy() -- Rayfield API allows destroying tabs to hide them
+        -- Destroy StartTab to hide it
+        StartTab:Destroy()
 
-        -- Build Home tab buttons
+        -- Create Home and Mods tabs AFTER loading finishes
+        local HomeTab = Window:CreateTab("Home", 4483362458)
         table.insert(homeButtons, HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -70,7 +58,7 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Build Mods tab buttons
+        local ModsTab = Window:CreateTab("Mods", 4483362458)
         table.insert(modsButtons, ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -99,10 +87,11 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Select Home tab after loading finishes
+        -- Switch to Home tab now
         Window:SelectTab(HomeTab)
     end
 })
+
 
 
 
