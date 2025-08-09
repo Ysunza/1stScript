@@ -4,6 +4,35 @@ if not Rayfield then
     return
 end
 
+-- Generate random math problem (1-100)
+local num1 = math.random(1, 100)
+local num2 = math.random(1, 100)
+local correctKey = tostring(num1 + num2)
+local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+
+-- Create Key System window (blocks script until correct key entered)
+local KeyWindow = Rayfield:CreateWindow({
+    Name = "NunHub Key System",
+    LoadingTitle = "NunHub Loading",
+    LoadingSubtitle = "by Ysunza",
+    Theme = "Default",
+    ToggleUIKeybind = "K",
+
+    KeySystem = true,
+    KeySettings = {
+        Title = "Math Key System",
+        Subtitle = "Answer the math problem to continue",
+        Note = keyNote,
+        FileName = "MathKeyFile",
+        SaveKey = true,
+        GrabKeyFromSite = false,
+        Key = {correctKey}
+    }
+})
+
+-- Destroy the key window after successful key entry
+
+-- Create the main window and tabs/buttons after key is verified
 local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
     LoadingTitle = "NunHub Loaded",
@@ -77,6 +106,6 @@ ModsTab:CreateButton({
     end
 })
 
-MainWindow:Toggle(true) -- Show UI immediately
+MainWindow:Toggle(true) -- Show the main UI immediately after key success
 
-print("UI is now visible")
+print("UI is now visible after key verification")
