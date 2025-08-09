@@ -8,11 +8,25 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
--- Create StartTab now; do NOT create HomeTab or ModsTab yet
+-- Create all tabs initially
 local StartTab = Window:CreateTab("Start", 4483362458)
+local HomeTab = Window:CreateTab("Home", 4483362458)
+local ModsTab = Window:CreateTab("Mods", 4483362458)
 
+-- Hide Home and Mods tabs by default by selecting Start tab first
+Window:SelectTab(StartTab)
+
+-- Store buttons so we can clear them if needed
 local homeButtons = {}
 local modsButtons = {}
+
+-- Clear buttons function
+local function clearButtons(buttonList)
+    for _, btn in pairs(buttonList) do
+        btn:Destroy()
+    end
+    return {}
+end
 
 local loadingLabel = StartTab:CreateLabel("")
 
@@ -29,11 +43,11 @@ StartTab:CreateButton({
             wait(1)
         end
 
-        -- Destroy StartTab to hide it
-        StartTab:Destroy()
+        -- Clear any old buttons (if any)
+        homeButtons = clearButtons(homeButtons)
+        modsButtons = clearButtons(modsButtons)
 
-        -- Create Home and Mods tabs AFTER loading finishes
-        local HomeTab = Window:CreateTab("Home", 4483362458)
+        -- Add buttons to Home tab
         table.insert(homeButtons, HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -58,7 +72,7 @@ StartTab:CreateButton({
             end
         }))
 
-        local ModsTab = Window:CreateTab("Mods", 4483362458)
+        -- Add buttons to Mods tab
         table.insert(modsButtons, ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -87,7 +101,7 @@ StartTab:CreateButton({
             end
         }))
 
-        -- Switch to Home tab now
+        -- Switch to Home tab after loading
         Window:SelectTab(HomeTab)
     end
 })
