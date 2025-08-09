@@ -32,7 +32,11 @@ local MainWindow = Rayfield:CreateWindow({
 MainWindow:Toggle(true)
 print("Key system UI should now be visible")
 
-local Tab = MainWindow:CreateTab("Tab Example", 4483362458)
+-- This runs only after key is correctly entered
+MainWindow:OnKeySystemSuccess(function()
+    print("Correct key entered, creating tab")
 
+    local Tab = MainWindow:CreateTab("Tab Example", 4483362458)
+    
+    -- You can add buttons or other elements to Tab here
 end)
-
