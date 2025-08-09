@@ -31,7 +31,7 @@ local MainWindow = Rayfield:CreateWindow({
     }
 })
 
-MainWindow:Toggle(true)
+
 
 
 local MainWindow = Rayfield:CreateWindow({
