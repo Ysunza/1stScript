@@ -8,10 +8,13 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
-local startButton
-local loadingLabel = Window:CreateLabel("") -- empty at first
+local StartSection = Window:CreateSection("Start")
+local ContentSection = nil -- Will create later
 
-local contentButtons = {} -- to track and clear Home/Mods buttons
+local loadingLabel = StartSection:CreateLabel("")
+local startButton
+
+local contentButtons = {}
 
 local function clearContentButtons()
     for _, btn in pairs(contentButtons) do
@@ -20,12 +23,24 @@ local function clearContentButtons()
         end
     end
     contentButtons = {}
+    if ContentSection then
+        ContentSection:ClearAllChildren()
+    end
 end
 
--- Function to create Home content buttons
+local function createContentSection()
+    if ContentSection then
+        ContentSection:ClearAllChildren()
+    else
+        ContentSection = Window:CreateSection("Content")
+    end
+end
+
 local function showHomeContent()
     clearContentButtons()
-    table.insert(contentButtons, Window:CreateButton({
+    createContentSection()
+
+    table.insert(contentButtons, ContentSection:CreateButton({
         Name = "Discord Link",
         Callback = function()
             setclipboard("https://discord.gg/YourInviteHere")
@@ -36,7 +51,8 @@ local function showHomeContent()
             })
         end
     }))
-    table.insert(contentButtons, Window:CreateButton({
+
+    table.insert(contentButtons, ContentSection:CreateButton({
         Name = "YouTube Link",
         Callback = function()
             setclipboard("https://youtube.com/YourChannelHere")
@@ -49,16 +65,18 @@ local function showHomeContent()
     }))
 end
 
--- Function to create Mods content buttons
 local function showModsContent()
     clearContentButtons()
-    table.insert(contentButtons, Window:CreateButton({
+    createContentSection()
+
+    table.insert(contentButtons, ContentSection:CreateButton({
         Name = "Infinite Money",
         Callback = function()
             loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
         end
     }))
-    table.insert(contentButtons, Window:CreateButton({
+
+    table.insert(contentButtons, ContentSection:CreateButton({
         Name = "Load Spawner",
         Callback = function()
             local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
@@ -80,10 +98,10 @@ local function showModsContent()
     }))
 end
 
-startButton = Window:CreateButton({
+startButton = StartSection:CreateButton({
     Name = "Start",
     Callback = function()
-        startButton:Destroy() -- remove start button
+        startButton:Destroy()
         loadingLabel:Set("Loading... 0 / 10")
 
         for i = 1, 10 do
@@ -91,20 +109,21 @@ startButton = Window:CreateButton({
             wait(1)
         end
 
-        loadingLabel:Set("") -- clear loading label
+        loadingLabel:Set("")
 
-        -- Create Home and Mods buttons below
-        Window:CreateButton({
+        -- Create Home and Mods buttons inside Start section after loading
+        StartSection:CreateButton({
             Name = "Home",
             Callback = showHomeContent
         })
 
-        Window:CreateButton({
+        StartSection:CreateButton({
             Name = "Mods",
             Callback = showModsContent
         })
     end
 })
+
 
 
 
