@@ -1,42 +1,32 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Create Main Window
 local Window = Rayfield:CreateWindow({
-   Name = "NunHub",
-   Icon = 0,
-   LoadingTitle = "Loading NunHub",
-   LoadingSubtitle = "powered by Rayfield",
-   ShowText = "NunHub",
-   Theme = "Default",
-   ToggleUIKeybind = "K",
-
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "NunHubConfig",
-      FileName = "NunHubSettings"
-   },
-
-   Discord = {
-      Enabled = false,
-      Invite = "noinvitelink",
-      RememberJoins = true
-   },
-
-   KeySystem = false
+    Name = "NunHub",
+    LoadingTitle = "NunHub Loading",
+    LoadingSubtitle = "by Ysunza",
+    Theme = "Default",
+    ToggleUIKeybind = "K"
 })
 
 -- HOME TAB
-local HomeTab = Window:CreateTab("Home", 4483362458) -- Icon ID from Roblox
+local HomeTab = Window:CreateTab("Home", 4483362458) -- The number is an icon asset ID
 
 HomeTab:CreateButton({
     Name = "Join Discord",
     Callback = function()
-        setclipboard("https://discord.gg/YourInviteHere") -- Copies Discord link to clipboard
+        setclipboard("https://discord.gg/YourInviteHere")
         Rayfield:Notify({
-            Title = "Discord Link Copied",
-            Content = "Invite link has been copied to your clipboard!",
-            Duration = 5
+            Title = "Copied!",
+            Content = "Discord invite copied to clipboard.",
+            Duration = 3
         })
+    end
+})
+
+HomeTab:CreateButton({
+    Name = "Infinite Money",
+    Callback = function()
+        loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
     end
 })
 
@@ -45,14 +35,9 @@ local SettingsTab = Window:CreateTab("Settings", 4483362458)
 
 SettingsTab:CreateDropdown({
     Name = "Select Theme",
-    Options = {"Default", "Light", "Dark", "Ocean", "Tokyo Night"},
+    Options = {"Default", "Light", "Dark", "Ocean", "Mocha"},
     CurrentOption = "Default",
-    Callback = function(option)
-        Rayfield:SetTheme(option)
-        Rayfield:Notify({
-            Title = "Theme Changed",
-            Content = "Theme set to " .. option,
-            Duration = 3
-        })
+    Callback = function(selectedTheme)
+        Window:SetTheme(selectedTheme)
     end
 })
