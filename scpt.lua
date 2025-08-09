@@ -29,7 +29,7 @@ local KeyWindow = Rayfield:CreateWindow({
 })
 
 print("Correct key entered, destroying KeyWindow")
-KeyWindow:Destroy()
+
 
 -- Step 2: Create main UI window with tabs and buttons
 local MainWindow = Rayfield:CreateWindow({
