@@ -79,12 +79,20 @@ WelcomeWindow:CreateButton({
             end
         })
 
-        ModsTab:CreateButton({
-            Name = "Infinite Money",
-            Callback = function()
-                loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-            end
+     ModsTab:CreateButton({
+    Name = "Infinite Money",
+    Callback = function()
+        Rayfield:Notify({
+            Title = "Notice",
+            Content = "Try Again",
+            Duration = 3
         })
+        task.delay(3, function()
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end)
+    end
+})
+
 
         ModsTab:CreateButton({
             Name = "Load Spawner",
