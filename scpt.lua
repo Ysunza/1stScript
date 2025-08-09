@@ -32,20 +32,7 @@ local KeyWindow = Rayfield:CreateWindow({
 -- Destroy key window after correct key entered
 
 
--- Delay a bit before creating welcome window
-task.delay(1, function()
-    local WelcomeWindow = Rayfield:CreateWindow({
-        Name = "Welcome",
-        LoadingTitle = "Welcome!",
-        LoadingSubtitle = "Press Continue to start",
-        Theme = "Default",
-        ToggleUIKeybind = "K"
-    })
 
-    WelcomeWindow:CreateButton({
-        Name = "Continue",
-        Callback = function()
-            WelcomeWindow:Destroy()
 
             -- Create main UI window after welcome
             local MainWindow = Rayfield:CreateWindow({
