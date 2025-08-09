@@ -1,6 +1,6 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Function to create the main window after loading
+-- Define CreateMainWindow function first
 local function CreateMainWindow()
     local MainWindow = Rayfield:CreateWindow({
         Name = "NunHub",
@@ -10,9 +10,7 @@ local function CreateMainWindow()
         ToggleUIKeybind = "K"
     })
 
-    -- Home Tab
     local HomeTab = MainWindow:CreateTab("Home", 4483362458)
-
     HomeTab:CreateButton({
         Name = "Discord Link",
         Callback = function()
@@ -37,9 +35,7 @@ local function CreateMainWindow()
         end
     })
 
-    -- Mods Tab
     local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
-
     ModsTab:CreateButton({
         Name = "Infinite Money",
         Callback = function()
@@ -69,7 +65,7 @@ local function CreateMainWindow()
     })
 end
 
--- Create the Start Window
+-- Create Start Window
 local StartWindow = Rayfield:CreateWindow({
     Name = "Launcher",
     LoadingTitle = "Loading Launcher",
@@ -80,39 +76,32 @@ local StartWindow = Rayfield:CreateWindow({
 
 local StartTab = StartWindow:CreateTab("Start", 4483362458)
 
-local loadingLabel = nil
-local loadingCoroutine = nil
+-- Create the loading label outside callback to avoid nil errors
+local loadingLabel = StartTab:CreateLabel("")
 
--- Start button
 StartTab:CreateButton({
     Name = "Start",
     Callback = function()
-        -- Disable the start button so it can't be clicked again during loading
-        StartTab:Disable()
-
-        -- Create or update loading label
-        if not loadingLabel then
-            loadingLabel = StartTab:CreateLabel("Loading... 0 / 10")
+        -- Disable the Start button manually by hiding it or ignoring further presses
+        -- Rayfield might not support disable, so we use a simple guard:
+        if loadingLabel.Text ~= "" and loadingLabel.Text ~= "Loading... 0 / 10" then
+            return -- Prevent double press
         end
-
-        -- Loading animation coroutine
-        loadingCoroutine = coroutine.create(function()
-            for i = 1, 10 do
-                loadingLabel:Set("Loading... " .. i .. " / 10")
-                wait(1)
-            end
-            
-            -- After loading finishes
-            -- Close start window
-            StartWindow:Toggle(false)
-
-            -- Open new main window
-            CreateMainWindow()
-        end)
-
-        coroutine.resume(loadingCoroutine)
+        
+        -- Loading animation loop
+        for i = 1, 10 do
+            loadingLabel:Set("Loading... " .. i .. " / 10")
+            wait(1)
+        end
+        
+        -- Hide the start window
+        StartWindow:Toggle(false)
+        
+        -- Open the main window
+        CreateMainWindow()
     end
 })
+
 
 
 
