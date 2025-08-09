@@ -1,128 +1,91 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
-    Name = "NunHub",
-    LoadingTitle = "NunHub Loading",
-    LoadingSubtitle = "by Ysunza",
-    Theme = "Default",
-    ToggleUIKeybind = "K"
-})
+-- Generate two random numbers 1-1000
+local num1 = math.random(1, 1000)
+local num2 = math.random(1, 1000)
+local correctAnswer = num1 + num2
 
-local StartSection = Window:CreateSection("Start")
-local ContentSection = nil -- Will create later
+-- Show a simple input dialog to ask user for the answer
+local function requestKey()
+    local success, userInput = pcall(function()
+        -- Use Roblox's built-in Prompt or Rayfield's Input if available
+        -- Rayfield doesn't have native input dialog, so let's use a custom window for this
+        local keyWindow = Rayfield:CreateWindow({
+            Name = "Key Verification",
+            LoadingTitle = "Answer the math problem to continue",
+            LoadingSubtitle = num1 .. " + " .. num2 .. " = ?",
+            Theme = "Default",
+            ToggleUIKeybind = nil,
+            KeySystem = false,
+        })
 
-local loadingLabel = StartSection:CreateLabel("")
-local startButton
+        local result
+        local inputBox = nil
+        local verified = false
 
-local contentButtons = {}
+        -- Create input box and submit button
+        local tab = keyWindow:CreateTab("Verify", 4483362458)
 
-local function clearContentButtons()
-    for _, btn in pairs(contentButtons) do
-        if btn.Destroy then
-            btn:Destroy()
-        end
-    end
-    contentButtons = {}
-    if ContentSection then
-        ContentSection:ClearAllChildren()
-    end
-end
-
-local function createContentSection()
-    if ContentSection then
-        ContentSection:ClearAllChildren()
-    else
-        ContentSection = Window:CreateSection("Content")
-    end
-end
-
-local function showHomeContent()
-    clearContentButtons()
-    createContentSection()
-
-    table.insert(contentButtons, ContentSection:CreateButton({
-        Name = "Discord Link",
-        Callback = function()
-            setclipboard("https://discord.gg/YourInviteHere")
-            Rayfield:Notify({
-                Title = "Copied!",
-                Content = "Discord invite copied to clipboard.",
-                Duration = 3
-            })
-        end
-    }))
-
-    table.insert(contentButtons, ContentSection:CreateButton({
-        Name = "YouTube Link",
-        Callback = function()
-            setclipboard("https://youtube.com/YourChannelHere")
-            Rayfield:Notify({
-                Title = "Copied!",
-                Content = "YouTube channel link copied to clipboard.",
-                Duration = 3
-            })
-        end
-    }))
-end
-
-local function showModsContent()
-    clearContentButtons()
-    createContentSection()
-
-    table.insert(contentButtons, ContentSection:CreateButton({
-        Name = "Infinite Money",
-        Callback = function()
-            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-        end
-    }))
-
-    table.insert(contentButtons, ContentSection:CreateButton({
-        Name = "Load Spawner",
-        Callback = function()
-            local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
-            if Spawner then
-                Spawner.Load()
-                Rayfield:Notify({
-                    Title = "Spawner",
-                    Content = "Spawner module loaded.",
-                    Duration = 3
-                })
-            else
-                Rayfield:Notify({
-                    Title = "Error",
-                    Content = "Failed to load Spawner module.",
-                    Duration = 3
-                })
+        inputBox = tab:CreateTextbox({
+            Name = "Enter your answer",
+            PlaceholderText = "Type a number",
+            TextDisappear = false,
+            Callback = function(text)
+                result = text
             end
-        end
-    }))
+        })
+
+        tab:CreateButton({
+            Name = "Submit",
+            Callback = function()
+                if tonumber(result) == correctAnswer then
+                    verified = true
+                    Rayfield:Notify({
+                        Title = "Access Granted",
+                        Content = "Correct answer! Welcome.",
+                        Duration = 3
+                    })
+                    keyWindow:Toggle(false)
+                else
+                    Rayfield:Notify({
+                        Title = "Access Denied",
+                        Content = "Wrong answer. Try again.",
+                        Duration = 3
+                    })
+                end
+            end
+        })
+
+        -- Wait until verified (polling)
+        repeat wait(0.5) until verified
+        return true
+    end)
+    return success and userInput
 end
 
-startButton = StartSection:CreateButton({
-    Name = "Start",
-    Callback = function()
-        startButton:Destroy()
-        loadingLabel:Set("Loading... 0 / 10")
+if requestKey() then
+    -- Now create your main window after key verified
+    local Window = Rayfield:CreateWindow({
+        Name = "NunHub",
+        LoadingTitle = "NunHub Loading",
+        LoadingSubtitle = "by Ysunza",
+        Theme = "Default",
+        ToggleUIKeybind = "K"
+    })
 
-        for i = 1, 10 do
-            loadingLabel:Set("Loading... " .. i .. " / 10")
-            wait(1)
-        end
+    -- Your main UI code here...
 
-        loadingLabel:Set("")
+    local StartTab = Window:CreateTab("Start", 4483362458)
+    local loadingLabel = StartTab:CreateLabel("")
+    local homeButtons = {}
+    local modsButtons = {}
 
-        -- Create Home and Mods buttons inside Start section after loading
-        StartSection:CreateButton({
-            Name = "Home",
-            Callback = showHomeContent
-        })
+    -- Add your buttons and logic here...
 
-        StartSection:CreateButton({
-            Name = "Mods",
-            Callback = showModsContent
-        })
-    end
-})
+else
+    -- If the key input failed or user closed the window
+    print("Access denied or input failed.")
+end
 
 
 
