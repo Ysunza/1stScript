@@ -30,8 +30,7 @@ local KeyWindow = Rayfield:CreateWindow({
     }
 })
 
--- After key is correct, destroy KeyWindow
-KeyWindow:Destroy()
+
 
 -- Create Welcome window
 local WelcomeWindow = Rayfield:CreateWindow({
