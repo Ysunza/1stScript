@@ -4,13 +4,10 @@ if not Rayfield then
     return
 end
 
--- Generate random math problem
-local num1 = math.random(1, 100)
-local num2 = math.random(1, 100)
-local correctKey = tostring(num1 + num2)
-local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+local fixedKey = "12345"
+local keyNote = "Enter the key: " .. fixedKey
 
-print("Key system problem:", keyNote, "Answer:", correctKey)
+print("Key system prompt:", keyNote)
 
 local MainWindow = Rayfield:CreateWindow({
     Name = "NunHub",
@@ -20,17 +17,17 @@ local MainWindow = Rayfield:CreateWindow({
     ToggleUIKeybind = "K",
     KeySystem = true,
     KeySettings = {
-        Title = "Math Key System",
-        Subtitle = "Answer the math problem to continue",
+        Title = "Fixed Key System",
+        Subtitle = "Enter the key to continue",
         Note = keyNote,
-        FileName = "MathKeyFile",
+        FileName = "FixedKeyFile",
         SaveKey = true,
         GrabKeyFromSite = false,
-        Key = {correctKey}
+        Key = {fixedKey}
     }
 })
 
-MainWindow:Toggle(true)  -- show UI (key prompt)
+MainWindow:Toggle(true) -- Show the key input UI
 
 MainWindow:OnKeySystemSuccess(function()
     print("Correct key entered, creating tabs")
@@ -92,5 +89,5 @@ MainWindow:OnKeySystemSuccess(function()
         end
     })
 
-    MainWindow:Toggle(true)  -- keep window visible after key success
+    MainWindow:Toggle(true) -- Ensure window stays visible
 end)
