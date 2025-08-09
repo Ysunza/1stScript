@@ -1,112 +1,119 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
-    Name = "NunHub",
-    LoadingTitle = "NunHub Loading",
+-- Create the Start Window
+local StartWindow = Rayfield:CreateWindow({
+    Name = "Launcher",
+    LoadingTitle = "Loading Launcher",
     LoadingSubtitle = "by Ysunza",
     Theme = "Default",
-    ToggleUIKeybind = "K"
+    ToggleUIKeybind = nil -- No keybind for start window
 })
 
-local HomeTab = Window:CreateTab("Home", 4483362458)
-local SettingsTab = Window:CreateTab("Settings", 4483362458)
+local StartTab = StartWindow:CreateTab("Start", 4483362458)
 
--- Declare Spawner variable outside so you can access it later if needed
-local Spawner
+local loadingLabel = nil
+local loadingCoroutine = nil
 
--- Loading screen elements (create a separate tab or section for loading animation)
-local LoadingTab = Window:CreateTab("Loading", 4483362458)
+-- Start button
+StartTab:CreateButton({
+    Name = "Start",
+    Callback = function()
+        -- Disable the start button so it can't be clicked again during loading
+        StartTab:Disable()
 
--- Create a label to show loading progress
-local LoadingLabel = LoadingTab:CreateLabel("")
-
--- Function to show loading animation for n seconds then run callback
-local function showLoadingAndRun(seconds, callback)
-    Window:SetVisible(true) -- make sure UI is visible
-    -- Show the loading tab
-    Window:SelectTab(LoadingTab)
-    
-    coroutine.wrap(function()
-        for i = 1, seconds do
-            LoadingLabel:Set("Loading... ".. tostring(i) .. " / " .. tostring(seconds) .. " seconds")
-            wait(1)
+        -- Create or update loading label
+        if not loadingLabel then
+            loadingLabel = StartTab:CreateLabel("Loading... 0 / 10")
         end
-        
-        LoadingLabel:Set("Loading complete!")
-        wait(0.5)
-        
-        -- Run the callback (your script)
-        callback()
-        
-        -- Return to Home tab after loading finishes
-        Window:SelectTab(HomeTab)
-    end)()
+
+        -- Loading animation coroutine
+        loadingCoroutine = coroutine.create(function()
+            for i = 1, 10 do
+                loadingLabel:Set("Loading... " .. i .. " / 10")
+                wait(1)
+            end
+            
+            -- After loading finishes
+            -- Close start window
+            StartWindow:Toggle(false)
+
+            -- Open new main window
+            CreateMainWindow()
+        end)
+
+        coroutine.resume(loadingCoroutine)
+    end
+})
+
+-- Function to create the main window after loading
+function CreateMainWindow()
+    local MainWindow = Rayfield:CreateWindow({
+        Name = "NunHub",
+        LoadingTitle = "NunHub Loaded",
+        LoadingSubtitle = "by Ysunza",
+        Theme = "Default",
+        ToggleUIKeybind = "K"
+    })
+
+    -- Home Tab
+    local HomeTab = MainWindow:CreateTab("Home", 4483362458)
+
+    HomeTab:CreateButton({
+        Name = "Discord Link",
+        Callback = function()
+            setclipboard("https://discord.gg/YourInviteHere")
+            Rayfield:Notify({
+                Title = "Copied!",
+                Content = "Discord invite copied to clipboard.",
+                Duration = 3
+            })
+        end
+    })
+
+    HomeTab:CreateButton({
+        Name = "YouTube Link",
+        Callback = function()
+            setclipboard("https://youtube.com/YourChannelHere")
+            Rayfield:Notify({
+                Title = "Copied!",
+                Content = "YouTube channel link copied to clipboard.",
+                Duration = 3
+            })
+        end
+    })
+
+    -- Mods Tab
+    local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
+
+    ModsTab:CreateButton({
+        Name = "Infinite Money",
+        Callback = function()
+            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
+        end
+    })
+
+    ModsTab:CreateButton({
+        Name = "Load Spawner",
+        Callback = function()
+            local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
+            if Spawner then
+                Spawner.Load()
+                Rayfield:Notify({
+                    Title = "Spawner",
+                    Content = "Spawner module loaded.",
+                    Duration = 3
+                })
+            else
+                Rayfield:Notify({
+                    Title = "Error",
+                    Content = "Failed to load Spawner module.",
+                    Duration = 3
+                })
+            end
+        end
+    })
 end
 
--- HOME TAB BUTTONS
-
-HomeTab:CreateButton({
-    Name = "Join Discord",
-    Callback = function()
-        setclipboard("https://discord.gg/YourInviteHere")
-        Rayfield:Notify({
-            Title = "Copied!",
-            Content = "Discord invite copied to clipboard.",
-            Duration = 3
-        })
-    end
-})
-
-HomeTab:CreateButton({
-    Name = "Infinite Money",
-    Callback = function()
-        loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-    end
-})
-
-HomeTab:CreateButton({
-    Name = "Load Spawner Module",
-    Callback = function()
-        Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
-        
-        if Spawner then
-            Spawner.Load()
-            loadstring(game:HttpGet("https://pastefy.app/Ym83DFAi/raw"))()
-            Rayfield:Notify({
-                Title = "Spawner",
-                Content = "Spawner module loaded and Infinite Money script executed.",
-                Duration = 3
-            })
-        else
-            Rayfield:Notify({
-                Title = "Error",
-                Content = "Failed to load Spawner module.",
-                Duration = 3
-            })
-        end
-    end
-})
-
-HomeTab:CreateButton({
-    Name = "Run External Script with Loading",
-    Callback = function()
-        -- Show loading animation for 10 seconds, then run your external script from your GitHub link
-        showLoadingAndRun(10, function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Ysunza/1stScript/main/scpt.lua"))()
-        end)
-    end
-})
-
--- SETTINGS TAB
-
-SettingsTab:CreateDropdown({
-    Name = "Select Theme",
-    Options = {"Default", "Light", "Dark", "Ocean", "Mocha"},
-    CurrentOption = "Default",
-    Callback = function(selectedTheme)
-        Window:SetTheme(selectedTheme)
-    end
-})
 
 
 
