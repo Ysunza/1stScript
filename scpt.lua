@@ -1,28 +1,34 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- First: create a simple welcome window
-local WelcomeWindow = Rayfield:CreateWindow({
-    Name = "Welcome to NunHub",
-    LoadingTitle = "Welcome!",
-    LoadingSubtitle = "Press continue to start",
+-- Generate math problem
+local num1 = math.random(1, 100)
+local num2 = math.random(1, 100)
+local correctKey = tostring(num1 + num2)
+local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+
+local Window = Rayfield:CreateWindow({
+    Name = "NunHub",
+    LoadingTitle = "NunHub Loading",
+    LoadingSubtitle = "by Ysunza",
     Theme = "Default",
     ToggleUIKeybind = "K"
 })
 
-local proceedButton = WelcomeWindow:CreateButton({
+-- Create Welcome Tab
+local WelcomeTab = Window:CreateTab("Welcome", 4483362458)
+local welcomeButton = WelcomeTab:CreateButton({
     Name = "Continue",
     Callback = function()
-        -- Destroy welcome window
-        WelcomeWindow:Destroy()
+        -- Clear Welcome tab content (simulate hiding)
+        for _, btn in pairs(WelcomeTab:GetButtons()) do
+            btn:Destroy()
+        end
 
-        -- Now generate math problem for key system
-        local num1 = math.random(1, 100)
-        local num2 = math.random(1, 100)
-        local correctKey = tostring(num1 + num2)
-        local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
+        -- Open Key System window now (destroy current window and recreate with key)
+        Window:Destroy()
 
-        -- Create main window with key system
-        local Window = Rayfield:CreateWindow({
+        -- Create Window with KeySystem
+        local KeyWindow = Rayfield:CreateWindow({
             Name = "NunHub",
             LoadingTitle = "NunHub Loading",
             LoadingSubtitle = "by Ysunza",
@@ -41,11 +47,10 @@ local proceedButton = WelcomeWindow:CreateButton({
             }
         })
 
-        -- Create tabs
-        local HomeTab = Window:CreateTab("Home", 4483362458)
-        local ModsTab = Window:CreateTab("Mods", 4483362458)
+        -- Create Home and Mods tabs after key system
+        local HomeTab = KeyWindow:CreateTab("Home", 4483362458)
+        local ModsTab = KeyWindow:CreateTab("Mods", 4483362458)
 
-        -- Home buttons
         HomeTab:CreateButton({
             Name = "Discord Link",
             Callback = function()
@@ -70,7 +75,6 @@ local proceedButton = WelcomeWindow:CreateButton({
             end
         })
 
-        -- Mods buttons
         ModsTab:CreateButton({
             Name = "Infinite Money",
             Callback = function()
@@ -99,9 +103,10 @@ local proceedButton = WelcomeWindow:CreateButton({
             end
         })
 
-        Window:SelectTab(HomeTab)
+        KeyWindow:SelectTab(HomeTab)
     end
 })
+
 
 
 
