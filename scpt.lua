@@ -1,3 +1,5 @@
+print("Script started")
+
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 -- Generate random math problem (1-100)
