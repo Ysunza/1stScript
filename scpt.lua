@@ -8,11 +8,9 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "K"
 })
 
--- Declare Spawner variable outside so you can access it later if needed
 local Spawner
 
--- HOME TAB
-local HomeTab = Window:CreateTab("Home", 4483362458) -- The number is an icon asset ID
+local HomeTab = Window:CreateTab("Home", 4483362458)
 
 HomeTab:CreateButton({
     Name = "Join Discord",
@@ -33,16 +31,29 @@ HomeTab:CreateButton({
     end
 })
 
--- NEW BUTTON TO LOAD SPAWNER MODULE
 HomeTab:CreateButton({
     Name = "Load Spawner Module",
     Callback = function()
         Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
         if Spawner then
-            Spawner.Load() -- Load the default UI from Spawner
+            Spawner.Load() -- This shows the Spawner UI
+            
+            -- Wait a little for the UI to load
+            wait(1)
+            
+            -- Attempt to find and remove Spawner's UI to "go back" to NunHub UI
+            local player = game.Players.LocalPlayer
+            local playerGui = player:WaitForChild("PlayerGui")
+            
+            -- Assuming Spawner UI is a ScreenGui named "SpawnerUI" (replace with actual name if different)
+            local spawnerGui = playerGui:FindFirstChild("SpawnerUI")
+            if spawnerGui then
+                spawnerGui:Destroy()
+            end
+            
             Rayfield:Notify({
                 Title = "Spawner",
-                Content = "Spawner module loaded and UI displayed.",
+                Content = "Spawner loaded briefly, now returning to NunHub.",
                 Duration = 3
             })
         else
@@ -55,7 +66,6 @@ HomeTab:CreateButton({
     end
 })
 
--- SETTINGS TAB
 local SettingsTab = Window:CreateTab("Settings", 4483362458)
 
 SettingsTab:CreateDropdown({
@@ -66,4 +76,5 @@ SettingsTab:CreateDropdown({
         Window:SetTheme(selectedTheme)
     end
 })
+
 
