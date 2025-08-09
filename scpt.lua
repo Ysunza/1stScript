@@ -6,9 +6,11 @@ local num2 = math.random(1, 100)
 local correctKey = tostring(num1 + num2)
 local keyNote = "Solve this to get the key: " .. num1 .. " + " .. num2
 
+print("Generated key problem:", keyNote, "Answer:", correctKey)
+
 -- Step 1: Key System window (blocks until correct key)
 local KeyWindow = Rayfield:CreateWindow({
-    Name = "NunHub",
+    Name = "NunHub Key System",
     LoadingTitle = "NunHub Loading",
     LoadingSubtitle = "by Ysunza",
     Theme = "Default",
@@ -26,23 +28,29 @@ local KeyWindow = Rayfield:CreateWindow({
     }
 })
 
+print("Correct key entered, destroying KeyWindow")
 KeyWindow:Destroy()
 
--- Step 2: Create main window immediately after key accepted
+-- Step 2: Create main window
 local MainWindow = Rayfield:CreateWindow({
-    Name = "NunHub",
+    Name = "NunHub Main",
     LoadingTitle = "NunHub Loaded",
     LoadingSubtitle = "Welcome back!",
     Theme = "Default",
     ToggleUIKeybind = "K"
 })
+print("MainWindow created")
 
-local HomeTab = MainWindow:CreateTab("Home", 4483362458)
-local ModsTab = MainWindow:CreateTab("Mods", 4483362458)
+-- Create tabs without icon (empty string) to avoid icon issues
+local HomeTab = MainWindow:CreateTab("Home", "")
+local ModsTab = MainWindow:CreateTab("Mods", "")
+print("Tabs created")
 
+-- Create buttons on Home tab
 HomeTab:CreateButton({
     Name = "Discord Link",
     Callback = function()
+        print("Discord button clicked")
         setclipboard("https://discord.gg/YourInviteHere")
         Rayfield:Notify({
             Title = "Copied!",
@@ -55,6 +63,7 @@ HomeTab:CreateButton({
 HomeTab:CreateButton({
     Name = "YouTube Link",
     Callback = function()
+        print("YouTube button clicked")
         setclipboard("https://youtube.com/YourChannelHere")
         Rayfield:Notify({
             Title = "Copied!",
@@ -64,9 +73,11 @@ HomeTab:CreateButton({
     end
 })
 
+-- Create buttons on Mods tab
 ModsTab:CreateButton({
     Name = "Infinite Money",
     Callback = function()
+        print("Infinite Money button clicked")
         Rayfield:Notify({
             Title = "Notice",
             Content = "Try Again",
@@ -81,6 +92,7 @@ ModsTab:CreateButton({
 ModsTab:CreateButton({
     Name = "Load Spawner",
     Callback = function()
+        print("Load Spawner button clicked")
         local Spawner = loadstring(game:HttpGet("https://gitlab.com/darkiedarkie/dark/-/raw/main/Spawner.lua"))()
         if Spawner then
             Spawner.Load()
@@ -99,8 +111,13 @@ ModsTab:CreateButton({
     end
 })
 
+-- Select Home tab to show it first
 MainWindow:SelectTab(HomeTab)
+print("Home tab selected")
+
+-- Make sure the UI is toggled on
 MainWindow:Toggle(true)
+print("Main window toggled visible")
 
 
 
